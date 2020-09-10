@@ -9,7 +9,7 @@ import "../../interfaces/flamincome/Controller.sol";
 import "../../interfaces/external/DForce.sol";
 import "../../interfaces/external/Uniswap.sol";
 
-contract StrategyDForceUSDT {
+contract StrategyUSDTDForce {
     using SafeERC20 for IERC20;
     using Address for address;
     using SafeMath for uint256;
