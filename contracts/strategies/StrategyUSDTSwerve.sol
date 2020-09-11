@@ -60,6 +60,7 @@ contract StrategyUSDTSwerve {
         require(msg.sender == controller, "!controller");
         uint _balance = IERC20(want).balanceOf(address(this));
         if (_balance < _amount) {
+            _amount = _amount.sub(_balance);
             uint _flamswusd = Vault(flamswusd).balanceOf(address(this));
             Vault(flamswusd).withdraw(_flamswusd);
             uint _swusd = IERC20(swusd).balanceOf(address(this));
