@@ -15,7 +15,7 @@ contract StrategyUSDTSwerve {
     using Address for address;
     using SafeMath for uint256;
     
-    address constant public want = address(0x0000000000085d4780B73119b644AE5ecd22b376);
+    address constant public want = address(0xdAC17F958D2ee523a2206206994597C13D831ec7);
     address constant public swerve = address(0xa746c67eB7915Fa832a4C2076D403D4B68085431);
     address constant public swusd = address(0x77C6E4a580c0dCE4E5c7a17d0bc077188a83A059);
     address constant public flamswusd = address(0x2E5d55e4BF8ee14e17ed87B3aE3A82B7782E9d57);
