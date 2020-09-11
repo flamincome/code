@@ -44,6 +44,7 @@ contract RealizerMethane is ERC20 {
         _mint(msg.sender, _amount);
     }
     function BurnRealToken(uint _amount) public {
+        real[msg.sender] = real[msg.sender].sub(_amount);
         _burn(msg.sender, _amount);
     }
     function RealizeFLAMToken(uint _d, uint _m) external {
