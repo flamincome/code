@@ -150,7 +150,7 @@ contract StrategyDAICurve {
         // calculate amount of ycrv to withdraw for amount of _want_
         uint _ycrv = _amount.mul(1e18).div(ICurveFi(curve).get_virtual_price());
         // calculate amount of yycrv to withdraw for amount of _ycrv_
-        uint _yycrv = _ycrv.mul(1e18).div(yERC20(yycrv).getPricePerFullShare());
+        uint _yycrv = _ycrv.mul(1e18).div(yERC20(yycrv).priceE18());
         uint _before = IERC20(ycrv).balanceOf(address(this));
         yERC20(yycrv).withdraw(_yycrv);
         uint _after = IERC20(ycrv).balanceOf(address(this));
@@ -166,7 +166,7 @@ contract StrategyDAICurve {
     }
     
     function balanceOfYYCRVinYCRV() public view returns (uint) {
-        return balanceOfYYCRV().mul(yERC20(yycrv).getPricePerFullShare()).div(1e18);
+        return balanceOfYYCRV().mul(yERC20(yycrv).priceE18()).div(1e18);
     }
     
     function balanceOfYYCRVinyTUSD() public view returns (uint) {

@@ -3,8 +3,7 @@ pragma solidity ^0.6.2;
 
 interface Vault {
     function token() external view returns (address);
-    function getPricePerFullShare() external view returns (uint);
+    function priceE18() external view returns (uint);
     function deposit(uint) external;
     function withdraw(uint) external;
-    function balanceOf(address) external returns (uint);
 }

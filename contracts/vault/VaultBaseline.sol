@@ -24,8 +24,8 @@ contract VaultBaseline is ERC20 {
     address public controller;
 
     constructor (address _token, address _controller) public ERC20(
-        string(abi.encodePacked("flamincomed ", ERC20(_token).name())),
-        string(abi.encodePacked("flam", ERC20(_token).symbol()))
+        string(abi.encodePacked("flamincome ", ERC20(_token).name())),
+        string(abi.encodePacked("f", ERC20(_token).symbol()))
     ) {
         _setupDecimals(ERC20(_token).decimals());
         token = IERC20(_token);
@@ -116,7 +116,7 @@ contract VaultBaseline is ERC20 {
         token.safeTransfer(msg.sender, r);
     }
 
-    function getPricePerFullShare() public view returns (uint) {
+    function priceE18() public view returns (uint) {
         return balance().mul(1e18).div(totalSupply());
     }
 }

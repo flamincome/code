@@ -16,43 +16,43 @@ contract RealizerMethane is ERC20 {
     using SafeMath for uint256;
 
     IERC20 public token;
-    mapping(address => uint256) public flam;
-    mapping(address => uint256) public real;
+    mapping(address => uint256) public f;
+    mapping(address => uint256) public n;
 
     constructor (address _token) public ERC20(
-        string(abi.encodePacked("realized ", ERC20(Vault(_token).token()).name())),
-        string(abi.encodePacked("real", ERC20(Vault(_token).token()).symbol()))
+        string(abi.encodePacked("flamincome-normalized ", ERC20(Vault(_token).token()).name())),
+        string(abi.encodePacked("n", ERC20(Vault(_token).token()).symbol()))
     ) {
         _setupDecimals(ERC20(_token).decimals());
         token = IERC20(_token);
     }
-    function GetMaximumRealToken(address _addr) public view returns (uint) {
-        return flam[_addr].mul(Vault(address(token)).getPricePerFullShare()).div(1e18);
+    function GetMaximumNToken(address _addr) public view returns (uint) {
+        return f[_addr].mul(Vault(address(token)).priceE18()).div(1e18);
     }
-    function DepositFlamToken(uint _amount) public {
+    function DepositFToken(uint _amount) public {
         token.safeTransferFrom(msg.sender, address(this), _amount);
-        flam[msg.sender] = flam[msg.sender].add(_amount);
+        f[msg.sender] = f[msg.sender].add(_amount);
     }
-    function WithdrawFlamToken(uint _amount) public {
-        flam[msg.sender] = flam[msg.sender].sub(_amount);
-        require(real[msg.sender] <= GetMaximumRealToken(msg.sender));
+    function WithdrawFToken(uint _amount) public {
+        f[msg.sender] = f[msg.sender].sub(_amount);
+        require(n[msg.sender] <= GetMaximumNToken(msg.sender));
         token.safeTransfer(msg.sender, _amount);
     }
-    function MintRealToken(uint _amount) public {
-        real[msg.sender] = real[msg.sender].add(_amount);
-        require(real[msg.sender] <= GetMaximumRealToken(msg.sender));
+    function MintNToken(uint _amount) public {
+        n[msg.sender] = n[msg.sender].add(_amount);
+        require(n[msg.sender] <= GetMaximumNToken(msg.sender));
         _mint(msg.sender, _amount);
     }
-    function BurnRealToken(uint _amount) public {
-        real[msg.sender] = real[msg.sender].sub(_amount);
+    function BurnNToken(uint _amount) public {
+        n[msg.sender] = n[msg.sender].sub(_amount);
         _burn(msg.sender, _amount);
     }
-    function RealizeFLAMToken(uint _d, uint _m) external {
-        DepositFlamToken(_d);
-        MintRealToken(_m);
+    function RealizeFToken(uint _d, uint _m) external {
+        DepositFToken(_d);
+        MintNToken(_m);
     }
-    function UnrealizeFLAMToken(uint _w, uint _b) external {
-        BurnRealToken(_b);
-        WithdrawFlamToken(_w);
+    function UnrealizeFToken(uint _w, uint _b) external {
+        BurnNToken(_b);
+        WithdrawFToken(_w);
     }
 }

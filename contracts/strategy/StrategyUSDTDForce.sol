@@ -22,14 +22,21 @@ contract StrategyUSDTDForce {
     address constant public uni = address(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D);
     address constant public weth = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2); // used for df <> weth <> usdc route
     
-    uint public performanceFee = 5000;
-    uint constant public performanceMax = 10000;
-    
-    uint public withdrawalFee = 50;
-    uint constant public withdrawalMax = 10000;
+
     
     address public governance;
     address public controller;
+
+    function setGovernance(address _governance) external {
+        require(msg.sender == governance, "!governance");
+        governance = _governance;
+    }
+    
+    function setController(address _controller) external {
+        require(msg.sender == governance, "!governance");
+        controller = _controller;
+    }
+
     address public strategist;
     
     constructor(address _controller) public {
@@ -42,20 +49,7 @@ contract StrategyUSDTDForce {
         return "StrategyDForceUSDT";
     }
     
-    function setStrategist(address _strategist) external {
-        require(msg.sender == governance, "!governance");
-        strategist = _strategist;
-    }
-    
-    function setWithdrawalFee(uint _withdrawalFee) external {
-        require(msg.sender == governance, "!governance");
-        withdrawalFee = _withdrawalFee;
-    }
-    
-    function setPerformanceFee(uint _performanceFee) external {
-        require(msg.sender == governance, "!governance");
-        performanceFee = _performanceFee;
-    }
+
     
     function deposit() public {
         uint _want = IERC20(want).balanceOf(address(this));
@@ -180,14 +174,25 @@ contract StrategyUSDTDForce {
                .add(balanceOfD())
                .add(balanceOfPool());
     }
+
+    uint public performanceFee = 5000;
+    uint constant public performanceMax = 10000;
     
-    function setGovernance(address _governance) external {
+    uint public withdrawalFee = 50;
+    uint constant public withdrawalMax = 10000;   
+
+    function setStrategist(address _strategist) external {
         require(msg.sender == governance, "!governance");
-        governance = _governance;
+        strategist = _strategist;
     }
     
-    function setController(address _controller) external {
+    function setWithdrawalFee(uint _withdrawalFee) external {
         require(msg.sender == governance, "!governance");
-        controller = _controller;
+        withdrawalFee = _withdrawalFee;
     }
+    
+    function setPerformanceFee(uint _performanceFee) external {
+        require(msg.sender == governance, "!governance");
+        performanceFee = _performanceFee;
+    }  
 }

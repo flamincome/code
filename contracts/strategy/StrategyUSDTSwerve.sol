@@ -61,7 +61,7 @@ contract StrategyUSDTSwerve {
         uint _balance = IERC20(want).balanceOf(address(this));
         if (_balance < _amount) {
             _amount = _amount.sub(_balance);
-            uint _flamswusd = Vault(flamswusd).balanceOf(address(this));
+            uint _flamswusd = IERC20(flamswusd).balanceOf(address(this));
             Vault(flamswusd).withdraw(_flamswusd);
             uint _swusd = IERC20(swusd).balanceOf(address(this));
             uint _maximum = ISwerveFi(swerve).calc_withdraw_one_coin(_swusd, 2);
@@ -84,9 +84,11 @@ contract StrategyUSDTSwerve {
     // Withdraw all funds, normally used when migrating strategies
     function withdrawAll() external returns (uint balance) {
         require(msg.sender == controller, "!controller");
-        uint _flamswusd = Vault(flamswusd).balanceOf(address(this));
+        uint _flamswusd = IERC20(flamswusd).balanceOf(address(this));
         Vault(flamswusd).withdraw(_flamswusd);
         uint _swusd = IERC20(swusd).balanceOf(address(this));
+        IERC20(swusd).safeApprove(swerve, 0);
+        IERC20(swusd).safeApprove(swerve, _swusd);
         ISwerveFi(swerve).remove_liquidity_one_coin(_swusd, 2, 0);
         balance = IERC20(want).balanceOf(address(this));
         address vault = Controller(controller).vaults(address(want));
@@ -96,7 +98,7 @@ contract StrategyUSDTSwerve {
     
     function balanceOf() public view returns (uint) {
         uint _flamswusd = IERC20(flamswusd).balanceOf(address(this));
-        uint _swusd = _flamswusd.mul(Vault(flamswusd).getPricePerFullShare()).div(1e18);
+        uint _swusd = _flamswusd.mul(Vault(flamswusd).priceE18()).div(1e18);
         _swusd = IERC20(swusd).balanceOf(address(this)).add(_swusd);
         uint _usdt = ISwerveFi(swerve).calc_withdraw_one_coin(_swusd, 2);
         _usdt = IERC20(usdt).balanceOf(address(this)).add(_usdt);
