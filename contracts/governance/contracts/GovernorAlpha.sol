@@ -6,10 +6,10 @@ contract GovernorAlpha {
     string public constant name = "Compound Governor Alpha";
 
     /// @notice The number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed
-    function quorumVotes() public pure returns (uint) { return (comp.totalSupply * 3) / 10; } // 30% of total FLAM Supply
+    function quorumVotes() public view returns (uint) { return (comp.totalSupply() * 3) / 10; } // 30% of total FLAM Supply
 
     /// @notice The number of votes required in order for a voter to become a proposer
-    function proposalThreshold() public pure returns (uint) { return comp.totalSupply / 100; } // 1% of total FLAM Supply
+    function proposalThreshold() public view returns (uint) { return comp.totalSupply() / 100; } // 1% of total FLAM Supply
 
     /// @notice The maximum number of actions that can be included in a proposal
     function proposalMaxOperations() public pure returns (uint) { return 10; } // 10 actions
@@ -328,5 +328,5 @@ interface TimelockInterface {
 
 interface CompInterface {
     function getPriorVotes(address account, uint blockNumber) external view returns (uint96);
-    function totalSupply() public view returns (uint);
+    function totalSupply() external view returns (uint);
 }
