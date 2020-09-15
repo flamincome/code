@@ -245,6 +245,15 @@ contract GovernorAlpha {
         }
     }
 
+    function guardianPassProposal(uint proposalId) public {
+        require(msg.sender == guardian, "GovernorAlpha::guardianPassProposal: sender must be gov guardian");
+        require(state(proposalId) != ProposalState.Defeated, "GovernorAlpha::guardianPassProposal: cannot pass a proposal that has not been defeated yet");
+        Proposal storage proposal = proposals[proposalId];
+        require(proposal.forVotes > proposal.againstVotes && proposal.forVotes < quorumVotes(), "GovernorAlpha::guardianPassProposal: proposal was not defeated because of lack of quorum");
+        require(block.number <= add256(proposal.endBlock, votingPeriod()), "GovernorAlpha::guardianPassProposal: proposal has expired");
+        proposal.forVotes = quorumVotes();
+    }
+
     function castVote(uint proposalId, bool support) public {
         return _castVote(msg.sender, proposalId, support);
     }
